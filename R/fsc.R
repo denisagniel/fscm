@@ -15,8 +15,8 @@ fsc <- function(id, trt, time, y, pre_data, post_data, linear = FALSE) {
                    trt = !!trtn,
                    time = !!timen,
                    y = !!yn,
-                   pre_data = pre_ds,
-                   post_data = post_ds,
+                   pre_data = pre_data,
+                   post_data = post_data,
                    linear = linear)
 
   updated_post_data <- post_data %>%
