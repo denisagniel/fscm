@@ -1,5 +1,4 @@
-fit_pre_fpca <- function(id, trt, time, y, pre_data,
-                    ops = list(methodSelectK = 'AIC')) {
+fit_pre_fpca <- function(id, trt, time, y, pre_data, ops, weights = NULL) {
 
   idn <- enquo(id)
   trtn <- enquo(trt)
@@ -15,7 +14,7 @@ fit_pre_fpca <- function(id, trt, time, y, pre_data,
                        t(pre_y %>%
                            select(-!!idn, -!!trtn) %>%
                            as.matrix))
-  fpc_fit <- FPCA(L3$Ly, L3$Lt, optns = ops)
+  fpc_fit <- FPCA(L3$Ly, L3$Lt, optns = ops, weights = weights)
   fpc_fit
 }
 

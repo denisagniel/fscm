@@ -1,4 +1,4 @@
-fsc <- function(id, trt, time, y, pre_data, post_data, linear = FALSE) {
+fsc <- function(id, trt, time, y, pre_data, post_data, linear = FALSE, include_y = FALSE, fpc_optns = NULL, wts = NULL) {
   idn <- enquo(id)
   trtn <- enquo(trt)
   timen <- enquo(time)
@@ -9,8 +9,19 @@ fsc <- function(id, trt, time, y, pre_data, post_data, linear = FALSE) {
                           trt = !!trtn,
                           time = !!timen,
                           y = !!yn,
-                          pre_data = pre_data)
-  wt_ds <- get_fsc_weights(fpc_fit, trt_ds)
+                          pre_data = pre_data,
+                          ops = fpc_optns,
+                          weights = wts)
+
+  if (include_y) {
+    pre_y <- pre_data %>%
+      select(!!idn, !!trtn, !!timen, !!yn) %>%
+      spread(!!timen, !!yn)
+    wt_ds <- get_fsc_weights(fpc_fit, trt_ds, y_ds = pre_y)
+  } else {
+    wt_ds <- get_fsc_weights(fpc_fit, trt_ds)
+  }
+
   m_ds <- get_mhat(id = !!idn,
                    trt = !!trtn,
                    time = !!timen,
